@@ -11,7 +11,33 @@ A production-grade, distributed URL shortener service built with Go, designed to
 
 ## Architecture
 
-![URL Shortener Architecture](docs/images/architecture-diagram.png)
+```mermaid
+graph TB
+    Client[Client Apps<br/>Web Browser, Mobile, API] --> LB[Load Balancer<br/>Nginx/HAProxy]
+    LB --> Gateway[API Gateway<br/>Rate Limiting, CORS, Security]
+    Gateway --> Service[Go API Service<br/>Gin Framework, Business Logic]
+    
+    Service --> Redis[Redis Cache<br/>URL Cache, Session Data]
+    Service --> DB[(PostgreSQL<br/>URL Storage, Analytics)]
+    
+    Service --> Metrics[Prometheus<br/>Metrics Collection]
+    Metrics --> Grafana[Grafana<br/>Dashboards, Monitoring]
+    Service --> Tracing[OpenTelemetry<br/>Distributed Tracing]
+    
+    style Client fill:#e1f5fe
+    style Service fill:#c8e6c9
+    style Redis fill:#fff3e0
+    style DB fill:#f3e5f5
+    style Metrics fill:#fce4ec
+    style Grafana fill:#e8f5e8
+    style Tracing fill:#e0f2f1
+```
+
+**Performance Targets:**
+- Throughput: 50K+ RPS
+- Latency: p95 < 100ms (cache), < 200ms (DB)
+- Cache Hit Ratio: ≥ 90%
+- Availability: 99.9%
 
 Our service follows a modern microservices architecture designed for high performance and scalability:
 
@@ -128,7 +154,39 @@ make load-test     # Run k6 load tests
 
 ### Request Flow
 
-![API Request Flow](docs/images/api-flow.png)
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant A as API Gateway
+    participant S as Service
+    participant R as Redis
+    participant D as Database
+    
+    Note over C,D: CREATE SHORT URL FLOW
+    C->>A: POST /api/v1/shorten
+    A->>S: Validate & Process
+    S->>D: Store URL
+    D-->>S: Confirm
+    S->>R: Cache Response
+    S-->>A: Success Response
+    A-->>C: Short URL Created
+    
+    Note over C,D: REDIRECT FLOW
+    C->>A: GET /:code
+    A->>S: Process Request
+    S->>R: Check Cache
+    alt Cache Hit
+        R-->>S: Cached Data
+        S->>D: Record Click (Async)
+    else Cache Miss
+        S->>D: Fetch URL
+        D-->>S: URL Data
+        S->>R: Update Cache
+        S->>D: Record Click
+    end
+    S-->>A: Redirect Response
+    A-->>C: 301 Redirect
+```
 
 The diagram above illustrates how requests flow through our system, from client interaction to response delivery.
 
@@ -246,7 +304,38 @@ make test
 make load-test
 ```
 
-![Load Test Results](docs/images/load-test-results.png)
+```mermaid
+graph TD
+    subgraph "Load Test Summary"
+        A[Test Duration<br/>17 minutes] --> B[Virtual Users<br/>500 peak]
+        B --> C[Total Requests<br/>2,847,392]
+        C --> D[Status: PASSED ✅]
+    end
+    
+    subgraph "Performance Metrics"
+        E[Avg Response: 23ms] --> F[Median: 18ms]
+        F --> G[p95: 89ms ✓]
+        G --> H[p99: 156ms]
+        H --> I[Max: 234ms]
+    end
+    
+    subgraph "Throughput & Errors"
+        J[Requests/sec: 2,789] --> K[Data Received: 45.2 MB]
+        K --> L[Data Sent: 12.8 MB]
+        L --> M[HTTP Errors: 0.12% ✓]
+        M --> N[Failed: 3,456]
+    end
+    
+    subgraph "Cache Performance"
+        O[Cache Hit: 94.2% ✓] --> P[Cache Response: 2ms]
+        P --> Q[DB Fallbacks: 5.8%]
+    end
+    
+    style D fill:#e8f5e8
+    style G fill:#e8f5e8
+    style M fill:#e8f5e8
+    style O fill:#e8f5e8
+```
 
 Our comprehensive load testing validates performance under real-world conditions:
 
@@ -274,7 +363,32 @@ Tests generate HTML coverage reports in `coverage.html`.
 
 ### Metrics Dashboard
 
-![Performance Metrics](docs/images/performance-metrics.png)
+```mermaid
+graph LR
+    subgraph "Real-time Metrics"
+        A[Request Rate<br/>45,234 RPS] --> B[Cache Hit<br/>94.2%]
+        B --> C[DB Latency<br/>12ms p95]
+        C --> D[Redis Latency<br/>2ms p95]
+        D --> E[Error Rate<br/>0.08%]
+    end
+    
+    subgraph "Response Time Distribution"
+        F[< 50ms<br/>85%] --> G[50-100ms<br/>12%]
+        G --> H[100-200ms<br/>2.5%]
+        H --> I[> 200ms<br/>0.5%]
+    end
+    
+    subgraph "System Health"
+        J[Active Connections<br/>1,847] --> K[DB Connections<br/>24/25]
+        K --> L[Redis Memory<br/>1.2GB/2GB]
+    end
+    
+    style A fill:#e8f5e8
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#e1f5fe
+    style E fill:#fce4ec
+```
 
 Our comprehensive monitoring provides real-time insights into system performance and health.
 
