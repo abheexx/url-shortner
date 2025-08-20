@@ -1,0 +1,48 @@
+Load Test Results Example
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           k6 Load Test Results                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Test Duration: 17 minutes                                                 │
+│  Virtual Users: 500 (peak)                                                 │
+│  Total Requests: 2,847,392                                                 │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Performance Metrics:                                                       │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  Average Response Time: 23ms                                         │   │
+│  │  Median Response Time: 18ms                                          │   │
+│  │  p95 Response Time: 89ms ✓ (Target: < 100ms)                        │   │
+│  │  p99 Response Time: 156ms                                            │   │
+│  │  Max Response Time: 234ms                                            │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Throughput & Errors:                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  Requests/sec: 2,789 RPS                                            │   │
+│  │  Data Received: 45.2 MB                                              │
+│  │  Data Sent: 12.8 MB                                                  │   │
+│  │  HTTP Errors: 0.12% ✓ (Target: < 1%)                                │   │
+│  │  Failed Requests: 3,456                                              │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Endpoint Breakdown:                                                       │
+│  • GET /:code (redirects): 2,705,023 requests (95.0%)                    │
+│  • POST /api/v1/shorten: 142,369 requests (5.0%)                         │
+│  • GET /api/v1/urls/:code: 28,473 requests (1.0%)                        │
+│                                                                             │
+│  Cache Performance:                                                        │
+│  • Cache Hit Ratio: 94.2% ✓ (Target: ≥ 90%)                              │
+│  • Average Cache Response: 2ms                                            │
+│  • Database Fallbacks: 5.8%                                               │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Test Status: PASSED ✓
+All performance thresholds met successfully!

@@ -1,0 +1,33 @@
+URL Shortener Architecture Diagram
+
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Client Apps   │    │   Load Balancer │    │   API Gateway   │
+│                 │    │                 │    │                 │
+│ • Web Browser  │────│ • Nginx/HAProxy │────│ • Rate Limiting │
+│ • Mobile Apps  │    │ • SSL Termination│    │ • CORS          │
+│ • API Clients  │    │ • Health Checks │    │ • Security      │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                                         │
+                                                         ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Redis Cache   │◄───│  Go API Service │    │   PostgreSQL   │
+│                 │    │                 │    │                 │
+│ • URL Cache    │    │ • Gin Framework │    │ • URL Storage  │
+│ • Session Data │    │ • Business Logic│    │ • Click Stats  │
+│ • Rate Limits  │    │ • Middleware    │    │ • Analytics    │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                                         │
+                                                         ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Prometheus    │    │   Grafana       │    │   OpenTelemetry │
+│                 │    │                 │    │                 │
+│ • Metrics      │    │ • Dashboards    │    │ • Distributed   │
+│ • Alerting     │    │ • Monitoring    │    │   Tracing       │
+│ • Scraping     │    │ • Visualization │    │ • Correlation   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+
+Performance Targets:
+• Throughput: 50K+ RPS
+• Latency: p95 < 100ms (cache), < 200ms (DB)
+• Cache Hit Ratio: ≥ 90%
+• Availability: 99.9%

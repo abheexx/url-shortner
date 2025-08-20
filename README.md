@@ -11,12 +11,18 @@ A production-grade, distributed URL shortener service built with Go, designed to
 
 ## Architecture
 
+![URL Shortener Architecture](docs/images/architecture-diagram.png)
+
+Our service follows a modern microservices architecture designed for high performance and scalability:
+
 - **Language**: Go 1.22+
 - **Web Framework**: Gin with graceful shutdown and middleware
 - **Storage**: PostgreSQL (primary), Redis (cache), Kafka (event log - optional)
 - **ID Generation**: ULID with base62 encoding
 - **Observability**: OpenTelemetry, Prometheus metrics, structured logging
 - **Security**: Rate limiting, input validation, CORS, security headers
+
+> **Note**: The architecture diagram above shows the complete system design. For a detailed view, see the [Architecture Decision Record](ADR-001-architecture.md).
 
 ## Performance Targets
 
@@ -75,6 +81,14 @@ curl -X POST http://localhost:8080/api/v1/shorten \
 curl -L http://localhost:8080/YOUR_CODE_HERE
 ```
 
+### Service Status
+
+Once running, you can access:
+- **API Service**: http://localhost:8080
+- **Health Check**: http://localhost:8080/api/v1/healthz
+- **Metrics**: http://localhost:8080/metrics
+- **pgAdmin**: http://localhost:5050 (admin/admin)
+
 ## Development
 
 ### Local Development
@@ -111,6 +125,12 @@ make load-test     # Run k6 load tests
 ```
 
 ## API Documentation
+
+### Request Flow
+
+![API Request Flow](docs/images/api-flow.png)
+
+The diagram above illustrates how requests flow through our system, from client interaction to response delivery.
 
 ### Endpoints
 
@@ -226,16 +246,37 @@ make test
 make load-test
 ```
 
-The load test simulates:
-- 95% GET requests (redirects)
-- 5% POST requests (create URLs)
-- Ramp up to 500 concurrent users
-- Performance thresholds: p95 < 100ms
+![Load Test Results](docs/images/load-test-results.png)
+
+Our comprehensive load testing validates performance under real-world conditions:
+
+- **95% GET requests** (redirects) - simulating real user behavior
+- **5% POST requests** (create URLs) - representing new URL creation
+- **Ramp up to 500 concurrent users** - testing scalability
+- **Performance thresholds**: p95 < 100ms for optimal user experience
+
+### Sample Load Test Output
+
+```bash
+# Run load test
+make load-test
+
+# Expected results
+✓ http_req_duration: p(95) < 100ms
+✓ http_req_failed: rate < 1%
+✓ Throughput: 50K+ RPS
+```
 
 ### Test Coverage
 Tests generate HTML coverage reports in `coverage.html`.
 
 ## Monitoring & Observability
+
+### Metrics Dashboard
+
+![Performance Metrics](docs/images/performance-metrics.png)
+
+Our comprehensive monitoring provides real-time insights into system performance and health.
 
 ### Metrics
 - **Prometheus endpoint**: `/metrics`
@@ -338,6 +379,44 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] Mobile SDKs
 - [ ] Advanced caching strategies
 - [ ] Geographic distribution
+
+## Screenshots and Visual Aids
+
+This README includes several visual diagrams and examples to help you understand the system:
+
+### Current Visual Elements
+- **Architecture Diagram**: System overview and component relationships
+- **API Flow Diagram**: Request processing and data flow
+- **Performance Metrics**: Example dashboard and key metrics
+- **Load Test Results**: Performance validation examples
+
+### Adding Real Screenshots
+
+To replace the text-based diagrams with actual screenshots:
+
+1. **Take screenshots** of your running service:
+   - Service health dashboard
+   - Performance metrics
+   - Load test results
+   - API responses
+
+2. **Save images** in the `docs/images/` directory:
+   - `architecture-diagram.png` (recommended: 800x600)
+   - `api-flow.png` (recommended: 800x600)
+   - `performance-metrics.png` (recommended: 1000x600)
+   - `load-test-results.png` (recommended: 1000x700)
+
+3. **Image formats**: Use PNG or JPG for screenshots, SVG for diagrams
+
+4. **Optimize images**: Keep file sizes under 500KB for better loading
+
+### Example Screenshots to Add
+- **Running service** with health check responses
+- **Prometheus metrics** dashboard
+- **Grafana** monitoring panels
+- **Load test** execution and results
+- **Database** schema and sample data
+- **Docker** containers running
 
 ---
 
