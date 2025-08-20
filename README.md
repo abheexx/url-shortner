@@ -2,14 +2,14 @@
 
 A production-grade, distributed URL shortener service built with Go, designed to handle 50K+ requests per second with p95 latency under 100ms.
 
-## 🚀 Features
+## Features
 
 - **High Performance**: Optimized for read-heavy workloads with Redis caching
 - **Scalable**: Horizontal scaling with stateless API design
 - **Production Ready**: Comprehensive observability, rate limiting, and security
 - **Developer Friendly**: Docker Compose setup, comprehensive testing, and CI/CD ready
 
-## 🏗️ Architecture
+## Architecture
 
 - **Language**: Go 1.22+
 - **Web Framework**: Gin with graceful shutdown and middleware
@@ -18,14 +18,14 @@ A production-grade, distributed URL shortener service built with Go, designed to
 - **Observability**: OpenTelemetry, Prometheus metrics, structured logging
 - **Security**: Rate limiting, input validation, CORS, security headers
 
-## 📊 Performance Targets
+## Performance Targets
 
 - **Throughput**: 50K+ requests/second
 - **Latency**: p95 < 100ms (cache hit), p95 < 200ms (cache miss)
 - **Cache Hit Ratio**: ≥ 90% on hot data
 - **Availability**: 99.9% uptime
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -75,7 +75,7 @@ curl -X POST http://localhost:8080/api/v1/shorten \
 curl -L http://localhost:8080/YOUR_CODE_HERE
 ```
 
-## 🛠️ Development
+## Development
 
 ### Local Development
 
@@ -110,7 +110,7 @@ make migrate-down  # Rollback migrations
 make load-test     # Run k6 load tests
 ```
 
-## 📚 API Documentation
+## API Documentation
 
 ### Endpoints
 
@@ -178,7 +178,7 @@ GET /metrics          # Prometheus metrics
 }
 ```
 
-## 🔧 Configuration
+## Configuration
 
 Configuration is handled via environment variables with sensible defaults:
 
@@ -210,7 +210,7 @@ URLSHORTENER_LOGGING_LEVEL=info
 URLSHORTENER_LOGGING_FORMAT=json
 ```
 
-## 🧪 Testing
+## Testing
 
 ### Unit Tests
 ```bash
@@ -235,7 +235,7 @@ The load test simulates:
 ### Test Coverage
 Tests generate HTML coverage reports in `coverage.html`.
 
-## 📊 Monitoring & Observability
+## Monitoring & Observability
 
 ### Metrics
 - **Prometheus endpoint**: `/metrics`
@@ -250,7 +250,7 @@ Tests generate HTML coverage reports in `coverage.html`.
 - **OpenTelemetry integration** for distributed tracing
 - **Request flow tracking** across services
 
-## 🚀 Deployment
+## Deployment
 
 ### Docker
 ```bash
@@ -271,7 +271,7 @@ Kubernetes manifests and Helm charts are available in `deploy/k8s/` and `deploy/
 - Use ingress controllers for load balancing
 - Configure proper monitoring and alerting
 
-## 🔒 Security Features
+## Security Features
 
 - **Rate limiting** (global + per-IP)
 - **Input validation** and sanitization
@@ -280,7 +280,7 @@ Kubernetes manifests and Helm charts are available in `deploy/k8s/` and `deploy/
 - **URL allowlist/blocklist** support
 - **Graceful degradation** on cache failures
 
-## 📈 Performance Tuning
+## Performance Tuning
 
 ### Redis Optimization
 ```bash
@@ -303,7 +303,7 @@ export GOGC=100       # Garbage collection tuning
 - Proper indexing on frequently queried columns
 - Regular VACUUM and ANALYZE
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -318,17 +318,17 @@ export GOGC=100       # Garbage collection tuning
 - Use conventional commit messages
 - Update documentation for API changes
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
+## Support
 
 - **Issues**: Create GitHub issues for bugs or feature requests
 - **Discussions**: Use GitHub Discussions for questions
 - **Documentation**: Check the [docs/](docs/) directory for detailed guides
 
-## 🗺️ Roadmap
+## Roadmap
 
 - [ ] Kafka integration for event streaming
 - [ ] Advanced analytics dashboard
@@ -341,4 +341,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ using Go and modern DevOps practices**
+**Built with Go and modern DevOps practices**
